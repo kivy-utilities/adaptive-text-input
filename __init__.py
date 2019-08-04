@@ -76,7 +76,7 @@ class Adaptive_TextInput(TextInput):
             self.trigger_refresh_y_dimension()
         except TypeError as e:
             if not self.trigger_refresh_y_dimension:
-                raise e
+                self.schedule_set_trigger_refresh_y_dimension()
 
     def on_focused(self, instance, value):
         """ Triggers updates to methods that are interested in `self.focus` status. """
