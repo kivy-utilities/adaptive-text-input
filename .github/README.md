@@ -46,7 +46,7 @@ Kivy layout that adapts dimensions based off text volume and active state.
 ```Bash
 _module_name='adaptive-text-input'
 _module_https_url="https://github.com/kivy-utilities/${_module_name}.git"
-_module_relative_path="lib/modules/${_module_name}"
+_module_relative_path="lib/modules/${_module_name//-/_}"
 ```
 
 
@@ -99,7 +99,7 @@ Incorporate the `adaptive-text-input.kv` file within some layout...
 
 
 ```Kivy
-#:include lib/adaptive-text-input/adaptive-text-input.kv
+#:include lib/adaptive_text_input/adaptive-text-input.kv
 
 
 Some_Screen:
@@ -130,7 +130,7 @@ And/or import and utilize Python class directly...
 
 from kivy.uix.screenmanager import Screen
 
-from lib.modules.adaptive-text-input import Adaptive_TextInput
+from lib.modules.adaptive_text_input import Adaptive_TextInput
 
 
 class Some_Screen(Screen):
@@ -202,6 +202,15 @@ To make full use of this project consider utilizing the [Adaptive_GridLayout](ht
 
 
 Some portions of logic may seem illogical, please open Pull Requests to correct bugs and/or add features.
+
+
+Python requires a `__init__.py` within each directory that may be imported...
+
+
+```Bash
+touch lib/__init__.py
+touch lib/modules/__init__.py
+```
 
 
 ___
