@@ -195,6 +195,9 @@ ___
   "&#x1F5D2; Additional resources and things to keep in mind when developing"
 
 
+To ensure that Kivy honors `height` and/or `width` set `size_hint_y` and/or `size_hint_x` to `None` for each element within layout.
+
+
 Fonts and Unicode may cause spacing and sizing to become a bit fiddly; or in other words code is **not** fully tested for internationalization.
 
 
