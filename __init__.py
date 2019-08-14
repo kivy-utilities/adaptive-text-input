@@ -21,7 +21,7 @@ class Adaptive_TextInput(TextInput):
         self.old_height = self.height
         self.trigger_refresh_y_dimension = None
         self.schedule_set_trigger_refresh_y_dimension = Clock.create_trigger(lambda _: self._set_trigger_refresh_grids_y_dimension(), 0)
-        self.schedule_trigger_refresh_y_dimension = Clock.create_trigger(lambda _: self.trigger_refresh_y_dimension(), 0)
+        self.schedule_trigger_refresh_y_dimension = None
 
     def _refresh_overflow_values(self, text):
         """
@@ -55,7 +55,7 @@ class Adaptive_TextInput(TextInput):
             if hasattr(element, 'trigger_refresh_y_dimension'):
                 return element.trigger_refresh_y_dimension
         else:
-            return False
+            return lambda: True
 
     def _set_trigger_refresh_grids_y_dimension(self, *args):
         """
@@ -63,6 +63,7 @@ class Adaptive_TextInput(TextInput):
         while absorbing extra arguments passed by Clock.
         """
         self.trigger_refresh_y_dimension = self._find_trigger_refresh_y_dimension()
+        self.schedule_trigger_refresh_y_dimension = Clock.create_trigger(lambda _: self.trigger_refresh_y_dimension(), 0)
 
     def _propagate_height_updates(self):
         """
@@ -74,9 +75,9 @@ class Adaptive_TextInput(TextInput):
         """
         try:
             self.trigger_refresh_y_dimension()
-        except TypeError as e:
+        except AttributeError as e:
             if not self.trigger_refresh_y_dimension:
-                self.schedule_set_trigger_refresh_y_dimension()
+                self._set_trigger_refresh_grids_y_dimension()
 
     def on_focused(self, instance, value):
         """ Triggers updates to methods that are interested in `self.focus` status. """
@@ -108,6 +109,7 @@ class Adaptive_TextInput(TextInput):
 
     def on_parent(self, instance, value):
         """ Waits for parenting to set customized text values because `self.text` maybe set after initialization. """
+        self._set_trigger_refresh_grids_y_dimension()
         self._refresh_overflow_values(text = self.text)
         self._refresh_text_value()
         self.schedule_set_trigger_refresh_y_dimension()
